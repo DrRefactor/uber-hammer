@@ -11,139 +11,33 @@
 
 #include "Model.h"
 #include "TexturedModel.h"
-#include "Transfromation.h"
+#include "Transformation.h"
 #include "AnimationController.h"
 #include "RotationController.h"
 #include "DrawableGroup.h"
 #include "TimelineController.h"
 #include "InvertedAnimation.h"
+#include "CameraController.h"
 
 using namespace std;
 
-const GLuint WIDTH = 1600;
-const GLuint HEIGHT = 1200;
-
-const float FoV = 90.f;
-
-glm::mat4 viewMatrix;
-glm::mat4 projectionMatrix;
-
-bool freeFloating = false;
+const GLuint WIDTH = 800;
+const GLuint HEIGHT = 600;
 
 glm::vec3 lightPosition = glm::vec3(0, 7, 7);
 float lightIntensity = 50.f;
-
-glm::vec3 position = glm::vec3(0, 0, 5);
-
-float orbitingAngle = 3.14f / 4;
-
-float horizontalAngle = 3.14f;
-float verticalAngle = 0.0f;
-
 bool triggered = false;
 bool running = false;
 
 GLFWwindow* window;
-
-void computeMatricesFromInputs() {
-	const float FoV = 45.0f;
-	const float speed = 3.0f; 
-	const float mouseSpeed = 0.005f;
-
-	const float orbitingDistance = 15.f;
-	const float orbitingHeight = 8.f;
-
-	static double lastTime = glfwGetTime();
-
-	double currentTime = glfwGetTime();
-	float deltaTime = float(currentTime - lastTime);
-
-	double xpos;
-	double ypos;
-
-	glfwGetCursorPos(window, &xpos, &ypos);
-	if(freeFloating)
-		glfwSetCursorPos(window, WIDTH / 2, HEIGHT / 2);
-
-	horizontalAngle += mouseSpeed * float(WIDTH / 2 - xpos);
-	verticalAngle += mouseSpeed * float(HEIGHT / 2 - ypos);
-
-	glm::vec3 direction(
-		cos(verticalAngle) * sin(horizontalAngle),
-		sin(verticalAngle),
-		cos(verticalAngle) * cos(horizontalAngle)
-	);
-
-	glm::vec3 right = glm::vec3(sin(horizontalAngle - 3.14f / 2.0f), 0, cos(horizontalAngle - 3.14f / 2.0f));
-
-	glm::vec3 up = glm::cross(right, direction);
-
-	if (glfwGetKey(window, GLFW_KEY_LEFT)) {
-		orbitingAngle += 1.f * deltaTime * speed;
-	}
-	if (glfwGetKey(window, GLFW_KEY_RIGHT)) {
-		orbitingAngle -= 1.f * deltaTime * speed;
-	}
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-		position += direction * deltaTime * speed;
-	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-		position -= direction * deltaTime * speed;
-	}
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-		position += right * deltaTime * speed;
-	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		position -= right * deltaTime * speed;
-	}
-	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-		position += up * deltaTime * speed;
-	}
-	if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
-		position -= up * deltaTime * speed;
-	}
-	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-		glfwSetWindowShouldClose(window, GL_TRUE);
-	}
-	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-		lightIntensity += 20 * deltaTime;
-	}
-	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
-		lightIntensity -= 20 * deltaTime;
-	}
-	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
-		freeFloating = !freeFloating;
-		printf("free floating toggle\n");
-	}
-	if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
-		triggered = true;
-	}
-
-	if (!freeFloating) {
-		position = glm::vec3(
-			cos(orbitingAngle) * orbitingDistance,
-			orbitingHeight,
-			sin(orbitingAngle) * orbitingDistance
-		);
-		direction = glm::vec3(4, 3., 0) - position;
-		direction = glm::normalize(direction);
-		up = glm::vec3(0, 1, 0);
-	}
-
-	projectionMatrix = glm::perspective(glm::radians(FoV), 4.0f / 3.0f, 0.1f, 100.0f);
-
-	viewMatrix = glm::lookAt(position, position + direction, up);
-
-	lastTime = currentTime;
-}
 
 int main() {
 	if (glfwInit() != GL_TRUE) {
 		cout << "GLFW initialization failed" << endl;
 		return -1;
 	}
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	try {
 		window = glfwCreateWindow(WIDTH, HEIGHT, "GKOM - projekt", nullptr, nullptr);
@@ -195,9 +89,7 @@ int main() {
 
 		Model hammerHandle(&hammer_handle_vertices[0], _countof(hammer_handle_vertices), &hammer_handle_indices[0], _countof(hammer_handle_indices), solidColourShader, hammerHandleColour);
 		
-		
 		Model hammerHead(&hammer_head_vertices[0], _countof(hammer_head_vertices), &hammer_head_indices[0], _countof(hammer_head_indices), solidColourShader, hammerHeadColour);
-		
 		
 		Model hammerTip(&hammer_tip_vertices[0], _countof(hammer_tip_vertices), &hammer_tip_indices[0], _countof(hammer_tip_indices), solidColourShader, hammerHeadColour);
 
@@ -251,26 +143,31 @@ int main() {
 
 		int animationStage = 0;
 
+		CameraController camera = CameraController(window);
+
 		while (!glfwWindowShouldClose(window)) {
 			glfwPollEvents();
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
 
-			computeMatricesFromInputs();
+			if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
+				triggered = true;
+			}
+			camera.updateView();
 
-			boardFinal.draw(projectionMatrix, viewMatrix);
-			table.draw(projectionMatrix, viewMatrix);
+			boardFinal.draw(camera.projectionMatrix, camera.viewMatrix);
+			table.draw(camera.projectionMatrix, camera.viewMatrix);
 
 			float frame = (glfwGetTime() - startTime) * acSpeed;
 			float effectiveFrame = running ? frame : 0;
 
 			moldTimeline.setFrame(effectiveFrame / 2 + animationStage * .5);
-			moldTimeline.draw(projectionMatrix, viewMatrix);
+			moldTimeline.draw(camera.projectionMatrix, camera.viewMatrix);
 			std::cout << effectiveFrame << " " << animationStage << std::endl;
 
 			hammerTimeline.setFrame(effectiveFrame);
-			hammerTimeline.draw(projectionMatrix, viewMatrix);
+			hammerTimeline.draw(camera.projectionMatrix, camera.viewMatrix);
 
 			if (triggered && !running) {
 				startTime = glfwGetTime();
@@ -283,7 +180,6 @@ int main() {
 					triggered = false;
 				}
 			}
-
 
 			glfwSwapBuffers(window);
 		}

@@ -1,7 +1,5 @@
 #include "TimelineController.h"
 
-
-
 void TimelineController::draw(const glm::mat4 projection, const glm::mat4 view, const glm::mat4 parentTransformation) {
 	for (unsigned i = 0; i < drawables.size(); i++) {
 		drawables[i]->draw(projection, view, parentTransformation);
@@ -11,12 +9,13 @@ void TimelineController::draw(const glm::mat4 projection, const glm::mat4 view, 
 void TimelineController::setFrame(const float t) {
 	for (int i = animations.size()-1; i >= 0; i--) {
 		if (t <= times[i].first) {
-			animations[i]->setFrame(0.);
+			animations[i]->setFrame(0.0);
 		} else if (t >= times[i].second) {
-			animations[i]->setFrame(1.);
+			animations[i]->setFrame(1.0);
 		} else {
 			float fromStart = t - times[i].first;
 			float total = times[i].second - times[i].first;
+			// setting current frame according to time fraction
 			animations[i]->setFrame(fromStart / total);
 		}
 	}

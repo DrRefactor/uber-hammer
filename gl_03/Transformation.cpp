@@ -1,10 +1,7 @@
-#include "Transfromation.h"
-
-
+#include "Transformation.h"
 
 Transformation::Transformation(const glm::mat4 & t, Drawable *m) :
 	t(t), m(m) {
-
 }
 
 void Transformation::draw(const glm::mat4 projection, const glm::mat4 view, const glm::mat4 parentTransformation) {

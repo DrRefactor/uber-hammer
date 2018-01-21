@@ -83,6 +83,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AnimationController.cpp" />
+    <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="DrawableGroup.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="InvertedAnimation.cpp" />
@@ -91,7 +92,7 @@
     <ClCompile Include="shprogram.cpp" />
     <ClCompile Include="TexturedModel.cpp" />
     <ClCompile Include="TimelineController.cpp" />
-    <ClCompile Include="Transfromation.cpp" />
+    <ClCompile Include="Transformation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="solidColour.frag" />
@@ -101,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationController.h" />
+    <ClInclude Include="CameraController.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="DrawableGroup.h" />
     <ClInclude Include="InvertedAnimation.h" />
@@ -110,7 +112,7 @@
     <ClInclude Include="shprogram.h" />
     <ClInclude Include="TexturedModel.h" />
     <ClInclude Include="TimelineController.h" />
-    <ClInclude Include="Transfromation.h" />
+    <ClInclude Include="Transformation.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

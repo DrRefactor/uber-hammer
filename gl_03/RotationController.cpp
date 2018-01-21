@@ -1,7 +1,5 @@
 #include "RotationController.h"
 
-
-
 RotationController::RotationController(float angle, glm::vec3 axis) :
 	angle(angle), axis(axis) {
 	this->setFrame(0.);

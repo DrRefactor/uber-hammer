@@ -22,6 +22,5 @@ private:
 	std::vector<Drawable*> animations;
 	std::vector<Drawable*> drawables;
 	std::vector<std::pair<float, float>> times;
-
 };
 

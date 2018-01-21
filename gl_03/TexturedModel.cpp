@@ -2,7 +2,6 @@
 #include <SOIL.h>
 #include <iostream>
 
-
 extern float lightIntensity;
 extern glm::vec3 lightPosition;
 

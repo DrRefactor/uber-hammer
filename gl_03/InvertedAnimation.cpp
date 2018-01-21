@@ -1,8 +1,5 @@
 #include "InvertedAnimation.h"
 
-
-
-
 void InvertedAnimation::setFrame(const float t) {
 	m->setFrame(1 - t);
 }

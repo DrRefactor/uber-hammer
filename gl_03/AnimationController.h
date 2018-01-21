@@ -13,13 +13,7 @@ public:
 
 protected:
 	glm::mat4 transformation_current;
-
-private:
-	//std::vector<Drawable*> ms;
-	//DrawableGroup ms;
-
 };
-
 
 class LinearAnimationController :
 	public AnimationController {
