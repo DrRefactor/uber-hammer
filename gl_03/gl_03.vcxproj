@@ -86,7 +86,6 @@
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="DrawableGroup.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="InvertedAnimation.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="RotationController.cpp" />
     <ClCompile Include="shprogram.cpp" />
@@ -95,6 +94,8 @@
     <ClCompile Include="Transformation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="skybox.frag" />
+    <None Include="skybox.vert" />
     <None Include="solidColour.frag" />
     <None Include="solidColour.vert" />
     <None Include="textured.frag" />
@@ -105,11 +106,11 @@
     <ClInclude Include="CameraController.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="DrawableGroup.h" />
-    <ClInclude Include="InvertedAnimation.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="models.h" />
     <ClInclude Include="RotationController.h" />
     <ClInclude Include="shprogram.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="TexturedModel.h" />
     <ClInclude Include="TimelineController.h" />
     <ClInclude Include="Transformation.h" />

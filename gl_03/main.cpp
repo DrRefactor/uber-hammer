@@ -16,8 +16,8 @@
 #include "RotationController.h"
 #include "DrawableGroup.h"
 #include "TimelineController.h"
-#include "InvertedAnimation.h"
 #include "CameraController.h"
+#include "Skybox.h"
 
 using namespace std;
 
@@ -78,12 +78,12 @@ int main() {
 
 		Model mold(&mold_vertices[0], _countof(mold_vertices), &mold_indices[0], _countof(mold_indices), solidColourShader, moldColour);
 
-		TexturedModel moldBase(&mold_base_vertices[0], _countof(mold_base_vertices), &mold_base_indices[0], _countof(mold_base_indices), texturedShader, "coin.png", GL_TEXTURE2);
-		moldBase.setModelMatrix(glm::translate(glm::vec3(0, 0, -1.6)));
+		//TexturedModel moldBase(&mold_base_vertices[0], _countof(mold_base_vertices), &mold_base_indices[0], _countof(mold_base_indices), texturedShader, "coin.png", GL_TEXTURE2);
+		//moldBase.setModelMatrix(glm::translate(glm::vec3(0, 0, -1.6)));
 
 		DrawableGroup moldGroup;
 		moldGroup.addModel(&mold);
-		moldGroup.addModel(&moldBase);
+		//moldGroup.addModel(&moldBase);
 
 		Transformation moldGroupTransformed(glm::translate(glm::vec3(0, 0, -0.25)), &moldGroup);
 
@@ -91,15 +91,11 @@ int main() {
 		
 		Model hammerHead(&hammer_head_vertices[0], _countof(hammer_head_vertices), &hammer_head_indices[0], _countof(hammer_head_indices), solidColourShader, hammerHeadColour);
 		
-		Model hammerTip(&hammer_tip_vertices[0], _countof(hammer_tip_vertices), &hammer_tip_indices[0], _countof(hammer_tip_indices), solidColourShader, hammerHeadColour);
-
 		hammerHead.setModelMatrix(glm::translate(glm::vec3(0, -0.1, 0)));
-		hammerTip.setModelMatrix(glm::translate(glm::vec3(-0.1, -0.1, 0)));
 
 		DrawableGroup hammer = DrawableGroup();
 		hammer.addModel(&hammerHandle);
 		hammer.addModel(&hammerHead);
-		hammer.addModel(&hammerTip);
 
 		Transformation hammerTilted = Transformation(glm::rotate(glm::pi<float>() / 4, glm::vec3(0, 0, -1)), &hammer);
 
@@ -143,7 +139,87 @@ int main() {
 
 		int animationStage = 0;
 
+
+		// skybox
+
+		ShaderProgram skyboxShader("skybox.vert", "skybox.frag");
+		GLfloat skyboxVertices[] = {
+			// Positions
+			-1.0f,  1.0f, -1.0f,
+			-1.0f, -1.0f, -1.0f,
+			1.0f, -1.0f, -1.0f,
+			1.0f, -1.0f, -1.0f,
+			1.0f,  1.0f, -1.0f,
+			-1.0f,  1.0f, -1.0f,
+
+			-1.0f, -1.0f,  1.0f,
+			-1.0f, -1.0f, -1.0f,
+			-1.0f,  1.0f, -1.0f,
+			-1.0f,  1.0f, -1.0f,
+			-1.0f,  1.0f,  1.0f,
+			-1.0f, -1.0f,  1.0f,
+
+			1.0f, -1.0f, -1.0f,
+			1.0f, -1.0f,  1.0f,
+			1.0f,  1.0f,  1.0f,
+			1.0f,  1.0f,  1.0f,
+			1.0f,  1.0f, -1.0f,
+			1.0f, -1.0f, -1.0f,
+
+			-1.0f, -1.0f,  1.0f,
+			-1.0f,  1.0f,  1.0f,
+			1.0f,  1.0f,  1.0f,
+			1.0f,  1.0f,  1.0f,
+			1.0f, -1.0f,  1.0f,
+			-1.0f, -1.0f,  1.0f,
+
+			-1.0f,  1.0f, -1.0f,
+			1.0f,  1.0f, -1.0f,
+			1.0f,  1.0f,  1.0f,
+			1.0f,  1.0f,  1.0f,
+			-1.0f,  1.0f,  1.0f,
+			-1.0f,  1.0f, -1.0f,
+
+			-1.0f, -1.0f, -1.0f,
+			-1.0f, -1.0f,  1.0f,
+			1.0f, -1.0f, -1.0f,
+			1.0f, -1.0f, -1.0f,
+			-1.0f, -1.0f,  1.0f,
+			1.0f, -1.0f,  1.0f
+		};
+
+		// Setup skybox VAO
+		GLuint skyboxVAO, skyboxVBO;
+		glGenVertexArrays(1, &skyboxVAO);
+		glGenBuffers(1, &skyboxVBO);
+		glBindVertexArray(skyboxVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid *)0);
+		glBindVertexArray(0);
+
+		// Cubemap (Skybox)
+		vector<const GLchar*> faces;/*
+		faces.push_back("skybox/right.tga");
+		faces.push_back("skybox/left.tga");
+		faces.push_back("skybox/top.tga");
+		faces.push_back("skybox/bottom.tga");
+		faces.push_back("skybox/back.tga");
+		faces.push_back("skybox/front.tga");*/
+		faces.push_back("coin.png");
+		faces.push_back("coin.png");
+		faces.push_back("coin.png");
+		faces.push_back("coin.png");
+		faces.push_back("coin.png");
+		faces.push_back("coin.png");
+		GLuint cubemapTexture = Skybox::LoadCubemap(faces);
+		// end of skybox
+
 		CameraController camera = CameraController(window);
+
+		glm::mat4 view;
+		glm::mat4 projection;
 
 		while (!glfwWindowShouldClose(window)) {
 			glfwPollEvents();
@@ -181,6 +257,25 @@ int main() {
 				}
 			}
 
+
+			// Draw skybox as last
+			glDepthFunc(GL_LEQUAL);  // Change depth function so depth test passes when values are equal to depth buffer's content
+			skyboxShader.Use();
+			view = glm::mat4(glm::mat3(camera.viewMatrix));	// Remove any translation component of the view matrix
+			projection = glm::mat4(glm::mat3(camera.projectionMatrix));
+
+			glUniformMatrix4fv(glGetUniformLocation(skyboxShader.get_programID(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+			glUniformMatrix4fv(glGetUniformLocation(skyboxShader.get_programID(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+			// skybox cube
+			glBindVertexArray(skyboxVAO);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+			glBindVertexArray(0);
+			glDepthFunc(GL_LESS); // Set depth function back to default
+			// end of skybox
+			
+			
 			glfwSwapBuffers(window);
 		}
 	} catch (exception ex) {

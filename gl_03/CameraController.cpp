@@ -72,7 +72,8 @@ void CameraController::updateView() {
 		orbitingHeight,
 		sin(orbitingAngle) * orbitingDistance
 	);
-	glm::vec3 direction = glm::vec3(4, 3., 0) - position;
+	glm::vec3 targetPoint = glm::vec3(4, 3., 0);
+	glm::vec3 direction = targetPoint - position;
 	direction = glm::normalize(direction);
 	glm::vec3 up = glm::vec3(0, 1, 0);
 

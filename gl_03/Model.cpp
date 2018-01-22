@@ -20,9 +20,6 @@ Model::Model(const GLfloat *vertices, size_t vertice_count, const GLuint *indice
 	// vertex normal data
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-	// vertex colour data
-	//glEnableVertexAttribArray(2);
-	//glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
 
 	glGenBuffers(1, &this->EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
@@ -41,17 +38,7 @@ Model::Model(const GLfloat *vertices, size_t vertice_count, const GLuint *indice
 
 	this->colourLocation = glGetUniformLocation(programID, "colour");
 	this->lightPositionLocation = glGetUniformLocation(programID, "LightPosition_worldspace");
-
-	//this->lightColourLocation = glGetUniformLocation(programID, "lightColour");
-	//this->diffuseIntensityLocation = glGetUniformLocation(programID, "diffuseIntensity");
-	//this->specularIntensityLocation = glGetUniformLocation(programID, "specularIntensity");
 	this->lightIntensityLocation = glGetUniformLocation(programID, "lightIntensity");
-
-	//this->lightPosition = glm::vec3(0, 10, 0);
-	//this->lightColour = glm::vec3(1, 1, 1);
-	//this->diffuseIntensity = glm::vec3(0.1, 0.1, 0.1);
-	//this->specularIntensity = glm::vec3(0.1, 0.1, 0.1);
-	//this->lightIntensity = 50.f;
 
 	this->indice_num = indice_count;
 }
@@ -74,9 +61,6 @@ void Model::draw(const glm::mat4 projection, const glm::mat4 view, const glm::ma
 
 	glUniform3fv(lightPositionLocation, 1, glm::value_ptr(lightPosition));
 	glUniform3fv(colourLocation, 1, glm::value_ptr(colour));
-	//glUniform3fv(lightColourLocation, 1, glm::value_ptr(lightColour));
-	//glUniform3fv(diffuseIntensityLocation, 1, glm::value_ptr(diffuseIntensity));
-	//glUniform3fv(specularIntensityLocation, 1, glm::value_ptr(specularIntensity));
 	glUniform1f(lightIntensityLocation, lightIntensity);
 
 	glBindVertexArray(this->VAO);
@@ -85,10 +69,6 @@ void Model::draw(const glm::mat4 projection, const glm::mat4 view, const glm::ma
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
 	glDrawElements(GL_TRIANGLES, this->indice_num, GL_UNSIGNED_INT, 0);
-
-	//glDisableVertexAttribArray(0);
-	//glDisableVertexAttribArray(1);
-	//glDisableVertexAttribArray(2);
 
 	glBindVertexArray(0);
 }

@@ -33,9 +33,6 @@
     <ClCompile Include="TimelineController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InvertedAnimation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TexturedModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -54,6 +51,8 @@
     <None Include="solidColour.vert" />
     <None Include="textured.frag" />
     <None Include="textured.vert" />
+    <None Include="skybox.frag" />
+    <None Include="skybox.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shprogram.h">
@@ -80,9 +79,6 @@
     <ClInclude Include="TimelineController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InvertedAnimation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TexturedModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -90,6 +86,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CameraController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

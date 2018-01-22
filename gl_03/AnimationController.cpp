@@ -15,10 +15,8 @@ void AnimationController::draw(const glm::mat4 projection, const glm::mat4 view,
 }
 
 void LinearAnimationController::setFrame(const float t) {
-	//AnimationController::setFrame(t);
-
-	glm::float32 tt = t;
-	this->transformation_current = transformation_start + tt * transformation_delta;
+	glm::float32 transformationFraction = t;
+	this->transformation_current = transformation_start + transformationFraction * transformation_delta;
 }
 
 LinearAnimationController::LinearAnimationController(const glm::mat4 &to, const glm::mat4 &from) :

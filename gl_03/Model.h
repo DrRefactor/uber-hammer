@@ -34,18 +34,9 @@ private :
 	GLuint colourLocation;
 	GLuint lightPositionLocation;
 
-	//GLuint lightColourLocation;
-	//GLuint diffuseIntensityLocation;
-	//GLuint specularIntensityLocation;
 	GLuint lightIntensityLocation;
-
-
+	
 	glm::vec3 colour;
-	//glm::vec3 lightPosition;
-	//glm::vec3 lightColour;
-	//glm::vec3 diffuseIntensity;
-	//glm::vec3 specularIntensity;
-	//GLfloat lightIntensity;
 
 	glm::mat4 model = glm::mat4(1.f);
 
