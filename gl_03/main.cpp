@@ -207,12 +207,12 @@ int main() {
 		faces.push_back("skybox/bottom.tga");
 		faces.push_back("skybox/back.tga");
 		faces.push_back("skybox/front.tga");*/
-		faces.push_back("coin.png");
-		faces.push_back("coin.png");
-		faces.push_back("coin.png");
-		faces.push_back("coin.png");
-		faces.push_back("coin.png");
-		faces.push_back("coin.png");
+		faces.push_back("skybox/browncloud_rt.jpg");
+		faces.push_back("skybox/browncloud_lf.jpg");
+		faces.push_back("skybox/browncloud_up.jpg");
+		faces.push_back("skybox/browncloud_dn.jpg");
+		faces.push_back("skybox/browncloud_bk.jpg");
+		faces.push_back("skybox/browncloud_ft.jpg");
 		GLuint cubemapTexture = Skybox::LoadCubemap(faces);
 		// end of skybox
 
