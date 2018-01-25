@@ -39,7 +39,7 @@ TexturedModel::TexturedModel(const GLfloat * vertices, size_t vertice_count, con
 
 	glGenTextures(1, &this->texture);
 
-	this->textureID = GL_TEXTURE0;
+	this->textureID = textId;
 
 	glActiveTexture(textureID);
 	glBindTexture(GL_TEXTURE_2D, this->texture);

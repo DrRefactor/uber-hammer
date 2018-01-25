@@ -18,6 +18,7 @@
 #include "TimelineController.h"
 #include "CameraController.h"
 #include "Skybox.h"
+#include "Box.h"
 
 using namespace std;
 
@@ -74,12 +75,10 @@ int main() {
 
 		Transformation hammerHolderR(glm::translate(glm::vec3(0, 0, 1.9f)), &hammerHolderL);
 
-		Model table(&table_vertices[0], _countof(table_vertices), &table_indices[0], _countof(table_indices), solidColourShader, tableColour);
+		TexturedModel table(&table_vertices[0], _countof(table_vertices), &table_indices[0], _countof(table_indices), texturedShader, "scratchedmetal.jpg", GL_TEXTURE2);
 
-		Model mold(&mold_vertices[0], _countof(mold_vertices), &mold_indices[0], _countof(mold_indices), solidColourShader, moldColour);
-
-		//TexturedModel moldBase(&mold_base_vertices[0], _countof(mold_base_vertices), &mold_base_indices[0], _countof(mold_base_indices), texturedShader, "coin.png", GL_TEXTURE2);
-		//moldBase.setModelMatrix(glm::translate(glm::vec3(0, 0, -1.6)));
+		TexturedModel mold(&moldBox.getVertices()[0], moldBox.verticesCount, &moldBox.getIndices()[0], moldBox.indicesCount, texturedShader, "rustymetal.jpg", GL_TEXTURE3);
+		//TexturedModel mold(mold_verts, _countof(mold_verts), mold_inds, _countof(mold_inds), texturedShader, "rustymetal.jpg", GL_TEXTURE3);
 
 		DrawableGroup moldGroup;
 		moldGroup.addModel(&mold);
@@ -200,13 +199,7 @@ int main() {
 		glBindVertexArray(0);
 
 		// Cubemap (Skybox)
-		vector<const GLchar*> faces;/*
-		faces.push_back("skybox/right.tga");
-		faces.push_back("skybox/left.tga");
-		faces.push_back("skybox/top.tga");
-		faces.push_back("skybox/bottom.tga");
-		faces.push_back("skybox/back.tga");
-		faces.push_back("skybox/front.tga");*/
+		vector<const GLchar*> faces;
 		faces.push_back("skybox/browncloud_rt.jpg");
 		faces.push_back("skybox/browncloud_lf.jpg");
 		faces.push_back("skybox/browncloud_up.jpg");
@@ -240,7 +233,7 @@ int main() {
 
 			moldTimeline.setFrame(effectiveFrame / 2 + animationStage * .5);
 			moldTimeline.draw(camera.projectionMatrix, camera.viewMatrix);
-			std::cout << effectiveFrame << " " << animationStage << std::endl;
+			//std::cout << effectiveFrame << " " << animationStage << std::endl;
 
 			hammerTimeline.setFrame(effectiveFrame);
 			hammerTimeline.draw(camera.projectionMatrix, camera.viewMatrix);
