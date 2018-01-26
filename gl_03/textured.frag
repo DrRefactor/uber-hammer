@@ -14,11 +14,11 @@ uniform vec3 LightPosition_worldspace;
 uniform float lightIntensity;
 
 void main(){
-	vec3 LightColor = vec3(1,1,1);
+	vec3 LightColor = vec3(1,0.7,0.6);
 	
 	vec3 MaterialDiffuseColor = texture(texture0, UV).rgb;
-	vec3 MaterialAmbientColor = vec3(0.2,0.2,0.2) * MaterialDiffuseColor;
-	vec3 MaterialSpecularColor = vec3(0.3,0.3,0.3);
+	vec3 MaterialAmbientColor = vec3(0.4,0.4,0.4) * MaterialDiffuseColor;
+	vec3 MaterialSpecularColor = vec3(0.5,0.5,0.5);
 
 	float distance = length( LightPosition_worldspace - Position_worldspace );
 
@@ -31,12 +31,11 @@ void main(){
 	vec3 E = normalize(EyeDirection_cameraspace);
 	vec3 R = reflect(-l,n);
 
-	// loking into relection?
 	float cosAlpha = clamp( dot( E,R ), 0,1 );
 	
 	color = 
 		// ambient
-		MaterialAmbientColor +
+		MaterialAmbientColor * LightColor +
 		// diffuse
 		MaterialDiffuseColor * LightColor * lightIntensity * cosTheta / (distance*distance) +
 		// reflection

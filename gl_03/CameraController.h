@@ -32,7 +32,5 @@ private:
 	const float maxOrbittingDistance = 25.f;
 	const float lightSpeed = 1.f;
 
-	glm::vec3 lightPositionDelta = glm::vec3(0, 0, 0);
-
 	glm::vec3 position = glm::vec3(0, 0, 5);
 };

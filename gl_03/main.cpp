@@ -9,7 +9,6 @@
 #include <glm/gtx/transform.hpp>
 #include "models.h"
 
-#include "Model.h"
 #include "TexturedModel.h"
 #include "Transformation.h"
 #include "AnimationController.h"
@@ -22,8 +21,8 @@
 
 using namespace std;
 
-const GLuint WIDTH = 800;
-const GLuint HEIGHT = 600;
+const GLuint WIDTH = 2*800;
+const GLuint HEIGHT = 2*600;
 
 glm::vec3 lightPosition = glm::vec3(0, 7, 7);
 float lightIntensity = 50.f;
@@ -41,7 +40,7 @@ int main() {
 	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	try {
-		window = glfwCreateWindow(WIDTH, HEIGHT, "GKOM - projekt", nullptr, nullptr);
+		window = glfwCreateWindow(WIDTH, HEIGHT, "GKOM - HAMMER", nullptr, nullptr);
 		if (window == nullptr)
 			throw exception("GLFW window not created");
 
@@ -65,31 +64,29 @@ int main() {
 		glm::vec3 moldColour = glm::vec3(.1f, .1f, .1f);
 		glm::vec3 tableColour = glm::vec3(.5f, .5f, .5f);
 
-		ShaderProgram solidColourShader("solidColour.vert", "solidColour.frag");
 		ShaderProgram texturedShader("textured.vert", "textured.frag");
 
-		TexturedModel board(&board_vertices[0], _countof(board_vertices), &board_indices[0], _countof(board_indices), texturedShader, "brushed-metal.png", GL_TEXTURE0);
+		TexturedModel board(&boardBox.getVertices()[0], boardBox.verticesCount, &boardBox.getIndices()[0], boardBox.indicesCount, texturedShader, "brushed-metal.png", GL_TEXTURE0);
 
-		TexturedModel hammerHolderL(hammer_holder_vertices, _countof(hammer_holder_vertices), hammer_holder_indices, _countof(hammer_holder_indices), texturedShader, "wood.png", GL_TEXTURE1);
+		TexturedModel hammerHolderL(&hammerHolderBox.getVertices()[0], hammerHolderBox.verticesCount, &hammerHolderBox.getIndices()[0], hammerHolderBox.indicesCount, texturedShader, "wood.png", GL_TEXTURE1);
 		hammerHolderL.setModelMatrix(glm::translate(glm::vec3(-.80f, 0, 0)));
 
-		Transformation hammerHolderR(glm::translate(glm::vec3(0, 0, 1.9f)), &hammerHolderL);
+		Transformation hammerHolderR(glm::translate(glm::vec3(0, 0, 1.25f)), &hammerHolderL);
 
 		TexturedModel table(&table_vertices[0], _countof(table_vertices), &table_indices[0], _countof(table_indices), texturedShader, "scratchedmetal.jpg", GL_TEXTURE2);
 
 		TexturedModel mold(&moldBox.getVertices()[0], moldBox.verticesCount, &moldBox.getIndices()[0], moldBox.indicesCount, texturedShader, "rustymetal.jpg", GL_TEXTURE3);
-		//TexturedModel mold(mold_verts, _countof(mold_verts), mold_inds, _countof(mold_inds), texturedShader, "rustymetal.jpg", GL_TEXTURE3);
+		TexturedModel moldTop(mold_base_vertices, _countof(mold_base_vertices), mold_base_indices, _countof(mold_base_indices), texturedShader, "cracked_metal.jpg", GL_TEXTURE3);
 
 		DrawableGroup moldGroup;
 		moldGroup.addModel(&mold);
-		//moldGroup.addModel(&moldBase);
 
 		Transformation moldGroupTransformed(glm::translate(glm::vec3(0, 0, -0.25)), &moldGroup);
 
-		Model hammerHandle(&hammer_handle_vertices[0], _countof(hammer_handle_vertices), &hammer_handle_indices[0], _countof(hammer_handle_indices), solidColourShader, hammerHandleColour);
-		
-		Model hammerHead(&hammer_head_vertices[0], _countof(hammer_head_vertices), &hammer_head_indices[0], _countof(hammer_head_indices), solidColourShader, hammerHeadColour);
-		
+		TexturedModel hammerHandle(&hammerHandleBox.getVertices()[0], hammerHandleBox.verticesCount, &hammerHandleBox.getIndices()[0], hammerHandleBox.indicesCount, texturedShader, "wood.png", GL_TEXTURE4);
+
+		TexturedModel hammerHead(&hammerHeadBox.getVertices()[0], hammerHandleBox.verticesCount, &hammerHandleBox.getIndices()[0], hammerHandleBox.indicesCount, texturedShader, "hammerhead.jpg", GL_TEXTURE5);
+
 		hammerHead.setModelMatrix(glm::translate(glm::vec3(0, -0.1, 0)));
 
 		DrawableGroup hammer = DrawableGroup();
@@ -129,15 +126,14 @@ int main() {
 		moldTimeline.addDrawable(moldFinal);
 
 		TimelineController hammerTimeline{};
-		hammerTimeline.addAnimation(&hammerRotation, 0.45f, 0.5f);
-		hammerTimeline.addAnimation(&hammerRotationBack, 0.6f, 1.0f);
+		hammerTimeline.addAnimation(&hammerRotation, 0.475f, 0.5f);
+		hammerTimeline.addAnimation(&hammerRotationBack, 0.5f, 1.0f);
 		hammerTimeline.addDrawable(hammerFinal);
 
 		double startTime = glfwGetTime();
-		double acSpeed = 0.3;
+		double acSpeed = 0.9;
 
 		int animationStage = 0;
-
 
 		// skybox
 
@@ -214,6 +210,9 @@ int main() {
 		glm::mat4 view;
 		glm::mat4 projection;
 
+		const int hitsToClearMold = 4;
+		int hits = 0;
+
 		while (!glfwWindowShouldClose(window)) {
 			glfwPollEvents();
 
@@ -231,9 +230,8 @@ int main() {
 			float frame = (glfwGetTime() - startTime) * acSpeed;
 			float effectiveFrame = running ? frame : 0;
 
-			moldTimeline.setFrame(effectiveFrame / 2 + animationStage * .5);
+			moldTimeline.setFrame(effectiveFrame / 2 + animationStage * 0.5);
 			moldTimeline.draw(camera.projectionMatrix, camera.viewMatrix);
-			//std::cout << effectiveFrame << " " << animationStage << std::endl;
 
 			hammerTimeline.setFrame(effectiveFrame);
 			hammerTimeline.draw(camera.projectionMatrix, camera.viewMatrix);
@@ -247,6 +245,9 @@ int main() {
 					animationStage = (animationStage + 1) % 2;
 					running = false;
 					triggered = false;
+					++hits;
+					if (hits == hitsToClearMold)
+						moldGroup.addModel(&moldTop);
 				}
 			}
 

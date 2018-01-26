@@ -1,5 +1,12 @@
 #pragma once
-#include "Model.h"
+#define GLEW_STATIC
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <GL/glew.h>
+
+#include "shprogram.h"
+#include "Drawable.h"
 
 class TexturedModel :
 	public Drawable {
@@ -21,13 +28,12 @@ private:
 	GLuint EBO;
 
 	GLuint MVP_location;
+	GLuint P_location;
 	GLuint V_location;
 	GLuint M_location;
 
 	GLuint lightPositionLocation;
 	GLuint lightIntensityLocation;
-
-	//glm::vec3 lightPosition;
 
 	glm::mat4 model = glm::mat4(1.f);
 

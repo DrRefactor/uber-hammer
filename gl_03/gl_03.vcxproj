@@ -86,7 +86,6 @@
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="DrawableGroup.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Model.cpp" />
     <ClCompile Include="RotationController.cpp" />
     <ClCompile Include="shprogram.cpp" />
     <ClCompile Include="TexturedModel.cpp" />
@@ -96,8 +95,6 @@
   <ItemGroup>
     <None Include="skybox.frag" />
     <None Include="skybox.vert" />
-    <None Include="solidColour.frag" />
-    <None Include="solidColour.vert" />
     <None Include="textured.frag" />
     <None Include="textured.vert" />
   </ItemGroup>
@@ -107,7 +104,6 @@
     <ClInclude Include="CameraController.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="DrawableGroup.h" />
-    <ClInclude Include="Model.h" />
     <ClInclude Include="models.h" />
     <ClInclude Include="RotationController.h" />
     <ClInclude Include="shprogram.h" />

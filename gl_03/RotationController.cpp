@@ -1,4 +1,13 @@
 #include "RotationController.h"
+//#include "Model.h"
+#define GLEW_STATIC
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <GL/glew.h>
+
+#include "shprogram.h"
+#include "Drawable.h"
 
 RotationController::RotationController(float angle, glm::vec3 axis) :
 	angle(angle), axis(axis) {
